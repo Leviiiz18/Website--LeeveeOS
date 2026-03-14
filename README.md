@@ -52,4 +52,4 @@ LeveeOS doesn't just show a list of projects; it simulates a fully-fledged opera
 
 ## 🌐 Live Website
 
-Check out the live interactive OS here: **[Insert Website Link Here]**
+Check out the live interactive OS here: **https://website-leevee-os.vercel.app/**
