@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 
-export default function Taskbar({ openWindows, minimized, onTaskClick, activeId }) {
+export default function Taskbar({ openWindows, minimized, onTaskClick, activeId, closeWindow, setMinimized, isMobile }) {
   const prefersReduced = useReducedMotion()
   const [now, setNow]           = useState(new Date())
   const [prevSec, setPrevSec]   = useState(now.getSeconds())
@@ -73,7 +73,44 @@ export default function Taskbar({ openWindows, minimized, onTaskClick, activeId 
         }} />
       )}
 
-      {/* Start orb */}
+      {/* Navigation Buttons for Mobile */}
+      {isMobile && (
+        <div className="flex gap-2 mr-2">
+          {/* Back Button */}
+          <motion.div
+            whileTap={{ scale: 0.9 }}
+            onClick={() => activeId && closeWindow(activeId)}
+            style={{
+              width: 38, height: 38, borderRadius: '50%', flexShrink: 0,
+              background: 'rgba(255,255,255,0.08)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 18, cursor: 'pointer',
+              color: activeId ? '#e2e8f0' : '#475569',
+              opacity: activeId ? 1 : 0.5,
+            }}
+          >
+            ←
+          </motion.div>
+          {/* Home Button */}
+          <motion.div
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setMinimized(openWindows.map(w => w.id))}
+            style={{
+              width: 38, height: 38, borderRadius: '50%', flexShrink: 0,
+              background: 'rgba(255,255,255,0.08)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 18, cursor: 'pointer',
+              color: '#e2e8f0',
+            }}
+          >
+            ⌂
+          </motion.div>
+        </div>
+      )}
+
+      {/* Start orb (Moved and styled as Apps/Menu) */}
       <motion.div
         animate={{ rotate: orbHovered ? 360 : 0 }}
         transition={{ duration: orbHovered ? 2 : 12, ease: 'linear', repeat: Infinity }}

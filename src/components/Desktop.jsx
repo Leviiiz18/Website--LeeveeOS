@@ -243,6 +243,9 @@ export default function Desktop({ isMobile }) {
         minimized={minimized}
         onTaskClick={onTaskClick}
         activeId={Object.entries(zMap).sort((a, b) => b[1] - a[1])[0]?.[0]}
+        closeWindow={closeWindow}
+        setMinimized={setMinimized}
+        isMobile={isMobile}
       />
 
       {/* ── Context menu ── */}
