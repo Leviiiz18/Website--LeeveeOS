@@ -1,21 +1,144 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PROJECTS } from '../constants/data'
 
 const TERMINAL_CYAN = '#00d4ff'
 
 export default function Projects() {
-  const [selected, setSelected] = useState(PROJECTS[0])
+  const [selected, setSelected] = useState(null)
   const [isKernelLoading, setIsKernelLoading] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
-  // Simulation of a kernel load when switching
+  useEffect(() => {
+    const check = () => {
+      const mobileWidth = window.innerWidth < 768
+      const hasTouch = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0))
+      setIsMobile(mobileWidth || hasTouch)
+    }
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
   const handleSelect = (p) => {
-    if (p.id === selected.id) return
     setIsKernelLoading(true)
     setTimeout(() => {
       setSelected(p)
       setIsKernelLoading(false)
     }, 400)
+  }
+
+  if (isMobile) {
+    return (
+      <div style={{
+        height: '100%', width: '100%', overflow: 'hidden',
+        background: '#040608',
+        color: TERMINAL_CYAN,
+        fontFamily: '"JetBrains Mono", monospace',
+        display: 'flex',
+        flexDirection: 'column',
+      }}>
+        <AnimatePresence mode="wait">
+          {!selected ? (
+            <motion.div
+              key="gallery"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="flex-grow p-6 overflow-y-auto"
+            >
+              <div className="text-[10px] font-black opacity-30 mb-6 tracking-[0.4em]">SYSTEM://APPS_GALLERY</div>
+              <div className="grid grid-cols-1 gap-4">
+                {PROJECTS.map((p, i) => (
+                  <motion.div
+                    key={p.id}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => handleSelect(p)}
+                    className="p-5 bg-cyan-500/5 border border-cyan-500/20 rounded-2xl flex items-center gap-5"
+                  >
+                    <span className="text-4xl">{p.icon}</span>
+                    <div className="flex-grow">
+                      <div className="text-sm font-black text-white">{p.name}</div>
+                      <div className="text-[10px] opacity-40">{p.type}</div>
+                    </div>
+                    <div className="text-cyan-500/40 text-xs">→</div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="detail"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="flex-grow flex flex-col p-6 overflow-y-auto"
+            >
+              {/* Fake status bar for context */}
+              <div className="flex items-center justify-between mb-8">
+                <button 
+                  onClick={() => setSelected(null)}
+                  className="text-xs font-black bg-cyan-500/10 px-4 py-2 border border-cyan-500/30 rounded-lg"
+                >
+                  ← GALLERY
+                </button>
+                <div className="text-[9px] opacity-20 tabular-nums">ID: {selected.id}</div>
+              </div>
+
+              <div className="flex items-center gap-4 mb-6">
+                <span className="text-5xl">{selected.icon}</span>
+                <div>
+                  <h2 className="text-3xl font-black italic text-white uppercase leading-none mb-2">
+                    {selected.name}
+                  </h2>
+                  <div className="text-[9px] bg-cyan-500/20 px-2 py-0.5 inline-block font-black tracking-widest">
+                    {selected.status.toUpperCase()}
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-6 border border-cyan-500/10 bg-white/[0.02] mb-8 rounded-xl">
+                <p className="text-xs leading-relaxed text-cyan-100/70">
+                  {selected.description}
+                </p>
+              </div>
+
+              <div className="mb-8">
+                <div className="text-[9px] font-black opacity-30 mb-4 tracking-[0.2em]">TECH_STACK</div>
+                <div className="flex flex-wrap gap-2">
+                  {selected.tech.map(t => (
+                    <span key={t} className="text-[10px] px-3 py-1.5 border border-white/5 bg-white/[0.03] rounded-md text-cyan-400">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-auto space-y-3">
+                <a 
+                  href={selected.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-3 w-full py-4 bg-cyan-500/20 border border-cyan-500/40 text-cyan-400 font-black text-xs rounded-xl"
+                >
+                  📂 CLONE_REPO
+                </a>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {isKernelLoading && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] flex items-center justify-center">
+             <motion.div 
+               animate={{ rotate: 360 }}
+               transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+               className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full"
+             />
+          </div>
+        )}
+      </div>
+    )
   }
 
   return (
@@ -25,46 +148,44 @@ export default function Projects() {
       color: TERMINAL_CYAN,
       fontFamily: '"JetBrains Mono", monospace',
       display: 'flex',
-      flexDirection: window.innerWidth < 768 ? 'column' : 'row',
+      flexDirection: 'row',
     }}>
       {/* Sidebar / Directory: Repository Directory */}
-      <div className={`${window.innerWidth < 768 ? 'w-full h-auto border-b' : 'w-72 border-r'} border-cyan-500/20 flex flex-col p-6 overflow-y-auto scrollbar-hide`}>
+      <div className="w-72 border-r border-cyan-500/20 flex flex-col p-6 overflow-y-auto scrollbar-hide">
         <div className="text-[10px] font-black opacity-30 mb-8 tracking-[0.4em]">DIRECTORY_ROOT://REPO</div>
         
-        <div className={`${window.innerWidth < 768 ? 'flex gap-2 overflow-x-auto pb-4 scrollbar-hide' : 'space-y-1'}`}>
+        <div className="space-y-1">
           {PROJECTS.map((p, i) => (
             <motion.div
               key={p.id}
               onClick={() => handleSelect(p)}
-              className={`group flex items-center gap-4 p-3 cursor-pointer border border-transparent transition-all duration-200 ${window.innerWidth < 768 ? 'flex-shrink-0 min-w-[200px]' : ''} ${
-                selected.id === p.id ? 'bg-cyan-500/10 border-cyan-500/30' : 'hover:bg-white/5'
+              className={`group flex items-center gap-4 p-3 cursor-pointer border border-transparent transition-all duration-200 ${
+                selected?.id === p.id ? 'bg-cyan-500/10 border-cyan-500/30' : 'hover:bg-white/5'
               }`}
             >
               <span className="text-[10px] opacity-20 tabular-nums">0x{(0x1000 + i * 16).toString(16).toUpperCase()}</span>
               <div className="flex-grow">
-                <div className={`text-xs font-bold ${selected.id === p.id ? 'text-white' : 'text-cyan-500/60 group-hover:text-cyan-400'}`}>
+                <div className={`text-xs font-bold ${selected?.id === p.id ? 'text-white' : 'text-cyan-500/60 group-hover:text-cyan-400'}`}>
                   {p.name.toUpperCase().replace(/\s/g, '_')}
                 </div>
                 <div className="text-[9px] opacity-30">{p.type}</div>
               </div>
-              {selected.id === p.id && (
+              {selected?.id === p.id && (
                 <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full shadow-[0_0_8px_#00d4ff]" />
               )}
             </motion.div>
           ))}
         </div>
 
-        {window.innerWidth >= 768 && (
-          <div className="mt-auto pt-8 border-t border-cyan-500/10 text-[9px] opacity-20 leading-loose">
-            SYSTEM_ACCESS: RW<br/>
-            CLUSTERS: {PROJECTS.length}<br/>
-            STATUS: ONLINE
-          </div>
-        )}
+        <div className="mt-auto pt-8 border-t border-cyan-500/10 text-[9px] opacity-20 leading-loose">
+          SYSTEM_ACCESS: RW<br/>
+          CLUSTERS: {PROJECTS.length}<br/>
+          STATUS: ONLINE
+        </div>
       </div>
 
       {/* Main Preview: Repository Content */}
-      <div className={`flex-grow relative flex flex-col ${window.innerWidth < 768 ? 'p-6' : 'p-12'} overflow-y-auto scrollbar-custom`}>
+      <div className="flex-grow relative flex flex-col p-12 overflow-y-auto scrollbar-custom">
         <AnimatePresence mode="wait">
           {isKernelLoading ? (
             <motion.div 
@@ -88,7 +209,7 @@ export default function Projects() {
                 <div>READING_SECTOR...</div>
               </div>
             </motion.div>
-          ) : (
+          ) : selected ? (
             <motion.div
               key={selected.id}
               initial={{ opacity: 0, y: 10 }}
@@ -98,9 +219,9 @@ export default function Projects() {
             >
               <div className="flex items-start justify-between mb-8">
                 <div>
-                  <div className={`flex ${window.innerWidth < 768 ? 'flex-col gap-2' : 'items-center gap-4'} mb-3`}>
-                    <span className={window.innerWidth < 768 ? 'text-2xl' : 'text-4xl'}>{selected.icon}</span>
-                    <h2 className={`${window.innerWidth < 768 ? 'text-2xl' : 'text-5xl'} font-black italic text-white tracking-tighter uppercase leading-none`}>
+                  <div className="flex items-center gap-4 mb-3">
+                    <span className="text-4xl">{selected.icon}</span>
+                    <h2 className="text-5xl font-black italic text-white tracking-tighter uppercase leading-none">
                       {selected.name}
                     </h2>
                   </div>
@@ -140,16 +261,16 @@ export default function Projects() {
               </div>
 
               {/* Action Buttons */}
-              <div className={`flex ${window.innerWidth < 768 ? 'flex-col gap-4' : 'gap-6'}`}>
+              <div className="flex gap-6">
                 <a 
                   href={selected.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-3 px-8 py-4 bg-cyan-500/10 border border-cyan-500/40 text-cyan-400 font-black text-xs hover:bg-cyan-500 hover:text-black transition-all group"
+                  className="flex items-center gap-3 px-8 py-4 bg-cyan-500/10 border border-cyan-500/40 text-cyan-400 font-black text-xs hover:bg-cyan-500 hover:text-black transition-all group"
                 >
                   <span className="group-hover:animate-pulse">📂</span> CLONE_REPOSITORY
                 </a>
-                <div className="flex items-center justify-center px-8 py-4 border border-white/10 text-white/30 font-black text-xs cursor-not-allowed italic">
+                <div className="px-8 py-4 border border-white/10 text-white/30 font-black text-xs cursor-not-allowed italic">
                   DECODE_METRICS
                 </div>
               </div>
@@ -158,6 +279,10 @@ export default function Projects() {
                 {Array(5).fill("0101 0110 1101 0010 1111 1010 0110 1101 1011 0010").join(" ")}
               </div>
             </motion.div>
+          ) : (
+            <div className="h-full flex items-center justify-center opacity-20 text-xs tracking-widest">
+              SELECT_A_CLUSTER_TO_PREVIEW
+            </div>
           )}
         </AnimatePresence>
       </div>

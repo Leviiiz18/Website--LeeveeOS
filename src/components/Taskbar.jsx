@@ -52,20 +52,20 @@ export default function Taskbar({ openWindows, minimized, onTaskClick, activeId,
 
   return (
     <motion.div
-      className={`fixed bottom-0 left-0 right-0 flex items-center gap-2 px-4 ${window.innerWidth < 768 ? 'justify-center mx-auto mb-6 w-fit min-w-[120px] max-w-[95%] px-6 rounded-3xl border border-white/10' : ''}`}
+      className={`fixed bottom-0 left-0 right-0 flex items-center gap-2 px-4 ${isMobile ? 'justify-center mx-auto mb-6 w-fit min-w-[120px] max-w-[95%] px-6 rounded-3xl border border-white/10' : ''}`}
       style={{
-        height: window.innerWidth < 768 ? 64 : 56, zIndex: 5000,
+        height: isMobile ? 64 : 56, zIndex: 5000,
         background: 'rgba(6,6,16,0.85)',
         backdropFilter: 'blur(32px) saturate(200%)',
-        borderTop: window.innerWidth < 768 ? '1px solid rgba(255,255,255,0.1)' : '1px solid transparent',
+        borderTop: isMobile ? '1px solid rgba(255,255,255,0.1)' : '1px solid transparent',
         backgroundImage: 'linear-gradient(rgba(6,6,16,0.85), rgba(6,6,16,0.85))',
-        boxShadow: window.innerWidth < 768 ? '0 12px 40px rgba(0,0,0,0.6)' : 'none',
+        boxShadow: isMobile ? '0 12px 40px rgba(0,0,0,0.6)' : 'none',
       }}
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
     >
       {/* Top gradient border */}
-      {window.innerWidth >= 768 && (
+      {!isMobile && (
         <div style={{
           position: 'absolute', top: 0, left: 0, right: 0, height: 1,
           background: 'linear-gradient(90deg, #7c3aed, #00d4ff, #7c3aed)',
@@ -169,7 +169,7 @@ export default function Taskbar({ openWindows, minimized, onTaskClick, activeId,
       </AnimatePresence>
 
       {/* Window buttons */}
-      <div className={`flex gap-1.5 overflow-x-auto ${window.innerWidth < 768 ? 'justify-center items-center py-1' : 'flex-1'}`}>
+      <div className={`flex gap-1.5 overflow-x-auto ${isMobile ? 'justify-center items-center py-1' : 'flex-1'}`}>
         <AnimatePresence>
           {openWindows.map(w => {
             const isMin    = minimized.includes(w.id)
@@ -189,21 +189,21 @@ export default function Taskbar({ openWindows, minimized, onTaskClick, activeId,
                   animate={{ scale }}
                   transition={{ type: 'spring', stiffness: 280, damping: 22 }}
                   style={{
-                    height: window.innerWidth < 768 ? 44 : 36, 
-                    width: window.innerWidth < 768 ? 44 : 'auto',
-                    padding: window.innerWidth < 768 ? 0 : '0 14px',
+                    height: isMobile ? 44 : 36, 
+                    width: isMobile ? 44 : 'auto',
+                    padding: isMobile ? 0 : '0 14px',
                     border: 'none',
                     background: isMin ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.11)',
                     color: isMin ? '#475569' : '#e2e8f0',
                     fontSize: 12, cursor: 'pointer',
-                    borderRadius: window.innerWidth < 768 ? 12 : 8, 
+                    borderRadius: isMobile ? 12 : 8, 
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                     fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
                     opacity: isMin ? 0.55 : 1,
                   }}
                 >
-                  <span style={{ fontSize: window.innerWidth < 768 ? 24 : 16 }}>{w.icon}</span>
-                  {window.innerWidth >= 768 && <span>{w.title}</span>}
+                  <span style={{ fontSize: isMobile ? 24 : 16 }}>{w.icon}</span>
+                  {!isMobile && <span>{w.title}</span>}
                 </motion.button>
                 {/* Active indicator dot */}
                 <AnimatePresence>
@@ -231,7 +231,7 @@ export default function Taskbar({ openWindows, minimized, onTaskClick, activeId,
       </div>
 
       {/* Clock - Hidden on Mobile Taskbar (moved to StatusBar) */}
-      {window.innerWidth >= 768 && (
+      {!isMobile && (
         <div
           style={{ position: 'relative', textAlign: 'right', flexShrink: 0, cursor: 'default' }}
           onMouseEnter={() => setShowDate(true)}

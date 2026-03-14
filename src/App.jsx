@@ -9,10 +9,19 @@ export default function App() {
   const cursorRef = useRef(null)
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768)
+    const check = () => {
+      // Robust mobile check: Window width < 768 OR presence of touch points
+      const mobileWidth = window.innerWidth < 768
+      const hasTouch = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0))
+      setIsMobile(mobileWidth || hasTouch)
+    }
     check()
     window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
+    window.addEventListener('orientationchange', check)
+    return () => {
+      window.removeEventListener('resize', check)
+      window.removeEventListener('orientationchange', check)
+    }
   }, [])
 
   // Custom cursor logic
