@@ -202,11 +202,13 @@ export default function BootScreen({ onComplete }) {
             <div className="relative mb-12 flex flex-col items-center">
               {/* HUD Brackets */}
               <motion.div 
-                className="absolute -inset-x-12 -inset-y-6 pointer-events-none opacity-20"
+                className="absolute -inset-y-6 pointer-events-none opacity-20"
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 0.2 }}
                 transition={{ duration: 1, delay: 0.5 }}
                 style={{ 
+                  left: window.innerWidth < 768 ? '-10%' : -48,
+                  right: window.innerWidth < 768 ? '-10%' : -48,
                   borderLeft: '2px solid #00d4ff', 
                   borderRight: '2px solid #7c3aed',
                   background: 'linear-gradient(90deg, rgba(0,212,255,0.05) 0%, transparent 50%, rgba(124,58,237,0.05) 100%)'
@@ -235,7 +237,7 @@ export default function BootScreen({ onComplete }) {
                       filter: { type: 'tween', duration: 0.3 } // Prevent negative blur
                     }}
                     style={{
-                      fontSize: 84,
+                      fontSize: window.innerWidth < 768 ? 42 : 84,
                       fontWeight: 900,
                       display: 'inline-block',
                       background: 'linear-gradient(135deg, #00d4ff, #7c3aed)',
@@ -272,7 +274,8 @@ export default function BootScreen({ onComplete }) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
                   style={{
-                    width: 520, minHeight: 200,
+                    width: window.innerWidth < 768 ? '90vw' : 520,
+                    minHeight: 200,
                     background: 'rgba(0,212,255,0.03)',
                     border: '1px solid rgba(0,212,255,0.1)',
                     borderRadius: 8,
@@ -318,7 +321,7 @@ export default function BootScreen({ onComplete }) {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.3 }}
-                  style={{ width: 520 }}
+                  style={{ width: window.innerWidth < 768 ? '90vw' : 520 }}
                 >
                   <div style={{ display: 'flex', gap: 3, marginBottom: 8 }}>
                     {segments.map((active, i) => (

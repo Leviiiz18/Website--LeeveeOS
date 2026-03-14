@@ -25,17 +25,18 @@ export default function Projects() {
       color: TERMINAL_CYAN,
       fontFamily: '"JetBrains Mono", monospace',
       display: 'flex',
+      flexDirection: window.innerWidth < 768 ? 'column' : 'row',
     }}>
-      {/* Sidebar: Repository Directory */}
-      <div className="w-72 border-r border-cyan-500/20 flex flex-col p-6 overflow-y-auto scrollbar-hide">
+      {/* Sidebar / Directory: Repository Directory */}
+      <div className={`${window.innerWidth < 768 ? 'w-full h-auto border-b' : 'w-72 border-r'} border-cyan-500/20 flex flex-col p-6 overflow-y-auto scrollbar-hide`}>
         <div className="text-[10px] font-black opacity-30 mb-8 tracking-[0.4em]">DIRECTORY_ROOT://REPO</div>
         
-        <div className="space-y-1">
+        <div className={`${window.innerWidth < 768 ? 'flex gap-2 overflow-x-auto pb-4 scrollbar-hide' : 'space-y-1'}`}>
           {PROJECTS.map((p, i) => (
             <motion.div
               key={p.id}
               onClick={() => handleSelect(p)}
-              className={`group flex items-center gap-4 p-3 cursor-pointer border border-transparent transition-all duration-200 ${
+              className={`group flex items-center gap-4 p-3 cursor-pointer border border-transparent transition-all duration-200 ${window.innerWidth < 768 ? 'flex-shrink-0 min-w-[200px]' : ''} ${
                 selected.id === p.id ? 'bg-cyan-500/10 border-cyan-500/30' : 'hover:bg-white/5'
               }`}
             >
@@ -53,15 +54,17 @@ export default function Projects() {
           ))}
         </div>
 
-        <div className="mt-auto pt-8 border-t border-cyan-500/10 text-[9px] opacity-20 leading-loose">
-          SYSTEM_ACCESS: RW<br/>
-          CLUSTERS: {PROJECTS.length}<br/>
-          STATUS: ONLINE
-        </div>
+        {window.innerWidth >= 768 && (
+          <div className="mt-auto pt-8 border-t border-cyan-500/10 text-[9px] opacity-20 leading-loose">
+            SYSTEM_ACCESS: RW<br/>
+            CLUSTERS: {PROJECTS.length}<br/>
+            STATUS: ONLINE
+          </div>
+        )}
       </div>
 
       {/* Main Preview: Repository Content */}
-      <div className="flex-grow relative flex flex-col p-12 overflow-y-auto scrollbar-custom">
+      <div className={`flex-grow relative flex flex-col ${window.innerWidth < 768 ? 'p-6' : 'p-12'} overflow-y-auto scrollbar-custom`}>
         <AnimatePresence mode="wait">
           {isKernelLoading ? (
             <motion.div 
@@ -95,9 +98,9 @@ export default function Projects() {
             >
               <div className="flex items-start justify-between mb-8">
                 <div>
-                  <div className="flex items-center gap-4 mb-3">
-                    <span className="text-4xl">{selected.icon}</span>
-                    <h2 className="text-5xl font-black italic text-white tracking-tighter uppercase leading-none">
+                  <div className={`flex ${window.innerWidth < 768 ? 'flex-col gap-2' : 'items-center gap-4'} mb-3`}>
+                    <span className={window.innerWidth < 768 ? 'text-2xl' : 'text-4xl'}>{selected.icon}</span>
+                    <h2 className={`${window.innerWidth < 768 ? 'text-2xl' : 'text-5xl'} font-black italic text-white tracking-tighter uppercase leading-none`}>
                       {selected.name}
                     </h2>
                   </div>
@@ -137,16 +140,16 @@ export default function Projects() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-6">
+              <div className={`flex ${window.innerWidth < 768 ? 'flex-col gap-4' : 'gap-6'}`}>
                 <a 
                   href={selected.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 px-8 py-4 bg-cyan-500/10 border border-cyan-500/40 text-cyan-400 font-black text-xs hover:bg-cyan-500 hover:text-black transition-all group"
+                  className="flex items-center justify-center gap-3 px-8 py-4 bg-cyan-500/10 border border-cyan-500/40 text-cyan-400 font-black text-xs hover:bg-cyan-500 hover:text-black transition-all group"
                 >
                   <span className="group-hover:animate-pulse">📂</span> CLONE_REPOSITORY
                 </a>
-                <div className="px-8 py-4 border border-white/10 text-white/30 font-black text-xs cursor-not-allowed italic">
+                <div className="flex items-center justify-center px-8 py-4 border border-white/10 text-white/30 font-black text-xs cursor-not-allowed italic">
                   DECODE_METRICS
                 </div>
               </div>
