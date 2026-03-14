@@ -52,23 +52,26 @@ export default function Taskbar({ openWindows, minimized, onTaskClick, activeId 
 
   return (
     <motion.div
-      className="fixed bottom-0 left-0 right-0 flex items-center gap-2 px-4"
+      className={`fixed bottom-0 left-0 right-0 flex items-center gap-2 px-4 ${window.innerWidth < 768 ? 'justify-center mx-auto mb-4 w-[90%] rounded-2xl border border-white/10' : ''}`}
       style={{
         height: 56, zIndex: 5000,
         background: 'rgba(6,6,16,0.75)',
         backdropFilter: 'blur(32px) saturate(180%)',
-        borderTop: '1px solid transparent',
+        borderTop: window.innerWidth < 768 ? '1px solid rgba(255,255,255,0.05)' : '1px solid transparent',
         backgroundImage: 'linear-gradient(rgba(6,6,16,0.75), rgba(6,6,16,0.75))',
+        boxShadow: window.innerWidth < 768 ? '0 8px 32px rgba(0,0,0,0.4)' : 'none',
       }}
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
     >
       {/* Top gradient border */}
-      <div style={{
-        position: 'absolute', top: 0, left: 0, right: 0, height: 1,
-        background: 'linear-gradient(90deg, #7c3aed, #00d4ff, #7c3aed)',
-        opacity: 0.6,
-      }} />
+      {window.innerWidth >= 768 && (
+        <div style={{
+          position: 'absolute', top: 0, left: 0, right: 0, height: 1,
+          background: 'linear-gradient(90deg, #7c3aed, #00d4ff, #7c3aed)',
+          opacity: 0.6,
+        }} />
+      )}
 
       {/* Start orb */}
       <motion.div
@@ -129,7 +132,7 @@ export default function Taskbar({ openWindows, minimized, onTaskClick, activeId 
       </AnimatePresence>
 
       {/* Window buttons */}
-      <div className="flex gap-1.5 flex-1 overflow-x-auto">
+      <div className={`flex gap-1.5 overflow-x-auto ${window.innerWidth < 768 ? 'justify-center items-center py-1' : 'flex-1'}`}>
         <AnimatePresence>
           {openWindows.map(w => {
             const isMin    = minimized.includes(w.id)
@@ -149,18 +152,21 @@ export default function Taskbar({ openWindows, minimized, onTaskClick, activeId 
                   animate={{ scale }}
                   transition={{ type: 'spring', stiffness: 280, damping: 22 }}
                   style={{
-                    height: 36, padding: '0 14px',
+                    height: window.innerWidth < 768 ? 44 : 36, 
+                    width: window.innerWidth < 768 ? 44 : 'auto',
+                    padding: window.innerWidth < 768 ? 0 : '0 14px',
                     border: 'none',
                     background: isMin ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.11)',
                     color: isMin ? '#475569' : '#e2e8f0',
                     fontSize: 12, cursor: 'pointer',
-                    borderRadius: 8, display: 'flex', alignItems: 'center', gap: 8,
+                    borderRadius: window.innerWidth < 768 ? 12 : 8, 
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                     fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
                     opacity: isMin ? 0.55 : 1,
                   }}
                 >
-                  <span>{w.icon}</span>
-                  <span>{w.title}</span>
+                  <span style={{ fontSize: window.innerWidth < 768 ? 24 : 16 }}>{w.icon}</span>
+                  {window.innerWidth >= 768 && <span>{w.title}</span>}
                 </motion.button>
                 {/* Active indicator dot */}
                 <AnimatePresence>
@@ -187,49 +193,51 @@ export default function Taskbar({ openWindows, minimized, onTaskClick, activeId 
         </AnimatePresence>
       </div>
 
-      {/* Clock */}
-      <div
-        style={{ position: 'relative', textAlign: 'right', flexShrink: 0, cursor: 'default' }}
-        onMouseEnter={() => setShowDate(true)}
-        onMouseLeave={() => setShowDate(false)}
-      >
-        <div style={{
-          fontSize: 13, color: '#e2e8f0', fontWeight: 600,
-          fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
-        }}>
-          {hm}:<motion.span
-            key={s}
-            animate={{ opacity: secOpacity }}
-            transition={{ duration: 0.18 }}
-          >{s}</motion.span>
+      {/* Clock - Hidden on Mobile Taskbar (moved to StatusBar) */}
+      {window.innerWidth >= 768 && (
+        <div
+          style={{ position: 'relative', textAlign: 'right', flexShrink: 0, cursor: 'default' }}
+          onMouseEnter={() => setShowDate(true)}
+          onMouseLeave={() => setShowDate(false)}
+        >
+          <div style={{
+            fontSize: 13, color: '#e2e8f0', fontWeight: 600,
+            fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
+          }}>
+            {hm}:<motion.span
+              key={s}
+              animate={{ opacity: secOpacity }}
+              transition={{ duration: 0.18 }}
+            >{s}</motion.span>
+          </div>
+          <div style={{ fontSize: 10, color: '#475569', fontFamily: '-apple-system, sans-serif' }}>
+            {fmtDate(now)}
+          </div>
+          <AnimatePresence>
+            {showDate && (
+              <motion.div
+                initial={{ opacity: 0, y: 4, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 4, scale: 0.95 }}
+                transition={{ duration: 0.15 }}
+                style={{
+                  position: 'absolute', bottom: '100%', right: 0,
+                  marginBottom: 8, padding: '6px 12px',
+                  background: 'rgba(10,10,22,0.95)',
+                  backdropFilter: 'blur(16px)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: 8, fontSize: 12, color: '#e2e8f0',
+                  whiteSpace: 'nowrap',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+                  fontFamily: '-apple-system, sans-serif',
+                }}
+              >
+                {now.toLocaleDateString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-        <div style={{ fontSize: 10, color: '#475569', fontFamily: '-apple-system, sans-serif' }}>
-          {fmtDate(now)}
-        </div>
-        <AnimatePresence>
-          {showDate && (
-            <motion.div
-              initial={{ opacity: 0, y: 4, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 4, scale: 0.95 }}
-              transition={{ duration: 0.15 }}
-              style={{
-                position: 'absolute', bottom: '100%', right: 0,
-                marginBottom: 8, padding: '6px 12px',
-                background: 'rgba(10,10,22,0.95)',
-                backdropFilter: 'blur(16px)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: 8, fontSize: 12, color: '#e2e8f0',
-                whiteSpace: 'nowrap',
-                boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
-                fontFamily: '-apple-system, sans-serif',
-              }}
-            >
-              {now.toLocaleDateString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+      )}
     </motion.div>
   )
 }

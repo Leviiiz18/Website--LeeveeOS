@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import Desktop    from './components/Desktop'
-import MobileView from './pages/MobileView'
 import BootScreen from './components/BootScreen'
 
 export default function App() {
@@ -49,20 +48,19 @@ export default function App() {
     }
   }, [isMobile])
 
-  if (isMobile) return <MobileView />
-
   return (
     <>
       {/* Custom cursor */}
-      <div id="levee-cursor" ref={cursorRef} />
+      {!isMobile && <div id="levee-cursor" ref={cursorRef} />}
 
       <AnimatePresence>
         {!booted ? (
           <BootScreen key="boot" onComplete={() => setBooted(true)} />
         ) : (
-          <Desktop key="desktop" />
+          <Desktop key="desktop" isMobile={isMobile} />
         )}
       </AnimatePresence>
     </>
   )
 }
+

@@ -17,6 +17,7 @@ import SettingsApp  from '../pages/Settings'
 import Explorer     from '../pages/Explorer'
 import Experience   from '../pages/Experience'
 import Widgets      from './Widgets'
+import StatusBar from './StatusBar'
 import { useTheme } from '../context/ThemeContext'
 
 const PAGE_MAP = {
@@ -39,7 +40,7 @@ const nextZ = () => ++zCounter
 
 const CONTEXT_ITEMS = ['New Window', 'Change Wallpaper', 'About LeveeOS', 'Sleep']
 
-export default function Desktop() {
+export default function Desktop({ isMobile }) {
   const [openWindows, setOpenWindows] = useState([])
   const [minimized,   setMinimized]   = useState([])
   const [zMap,        setZMap]        = useState({})
@@ -145,19 +146,25 @@ export default function Desktop() {
       {/* ── Ambient glow orbs ── */}
       <AmbientOrbs />
 
+      {/* ── Mobile Status Bar ── */}
+      {isMobile && <StatusBar />}
+
       {/* ── Desktop Widgets ── */}
-      <Widgets />
+      {!isMobile && <Widgets />}
 
       {/* ── Desktop icons ── */}
       <motion.div
-        className="absolute top-6 left-6 grid grid-flow-col gap-4"
+        className="absolute w-full grid p-6"
         style={{ 
           zIndex: 10,
-          gridTemplateColumns: 'repeat(auto-fill, 90px)',
-          gridTemplateRows: 'repeat(auto-fill, 100px)',
-          maxHeight: 'calc(100vh - 120px)', // Leave space for taskbar
-          height: 'fit-content',
-          width: 'fit-content'
+          top: isMobile ? 32 : 6,
+          left: 0,
+          gridTemplateColumns: isMobile ? 'repeat(auto-fill, minmax(80px, 1fr))' : 'repeat(auto-fill, 90px)',
+          gridAutoFlow: isMobile ? 'row' : 'column',
+          gridAutoRows: 'min-content',
+          maxHeight: isMobile ? 'calc(100vh - 120px)' : 'calc(100vh - 120px)',
+          justifyContent: isMobile ? 'center' : 'start',
+          gap: isMobile ? '12px' : '4px'
         }}
         initial="hidden"
         animate="visible"
