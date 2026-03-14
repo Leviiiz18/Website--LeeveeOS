@@ -15,6 +15,7 @@ import Resume       from '../pages/Resume'
 import Game         from '../pages/Game'
 import SettingsApp  from '../pages/Settings'
 import Explorer     from '../pages/Explorer'
+import Experience   from '../pages/Experience'
 import Widgets      from './Widgets'
 import { useTheme } from '../context/ThemeContext'
 
@@ -30,6 +31,7 @@ const PAGE_MAP = {
   game:     Game,
   settings: SettingsApp,
   explorer: Explorer,
+  experience: Experience,
 }
 
 let zCounter = 100

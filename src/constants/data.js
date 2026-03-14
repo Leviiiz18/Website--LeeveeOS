@@ -182,14 +182,26 @@ export const RESUME_DATA = {
   summary: 'Driven and adaptable aspiring AI engineer with hands-on experience in artificial intelligence projects, neural networks, and optimization systems. Passionate about solving real-world problems using AI-driven solutions. Experienced in hackathons, research-oriented internships, and collaborative development environments.',
   experience: [
     {
+      title: 'Gen AI Engineer Intern',
+      company: 'Akiyam Solutions Private Limited',
+      date: 'Feb 2026 – Present',
+      location: 'Remote',
+      bullets: [
+        'Researching and implementing Generative AI solutions.',
+        'Working on AI-driven automation and intelligent system design.'
+      ],
+      tech: 'GenAI, LLMs, Automation, AI Engineering'
+    },
+    {
       title: 'Internship – NITK Surathkal',
       date: 'May 2025 – Aug 2025',
       location: 'Surathkal, Karnataka, India',
       bullets: [
-        'Learned and applied core Artificial Intelligence concepts through virtual lab experiments.',
-        'Designed and implemented deep-learning models (CNN, ANN, and NEAT-based architectures) to solve AI lab experiments, demonstrating end-to-end model development and evaluation.'
+        'Worked on Artificial Intelligence experiments in virtual labs.',
+        'Built and tested deep learning models like CNN, ANN, and NEAT architectures.',
+        'Learned full AI workflow: model design, training, testing, and evaluation.'
       ],
-      tech: 'Python, Artificial Intelligence, CNN, ANN, NEAT, Neural Networks, TensorFlow, PyTorch'
+      tech: 'Python, TensorFlow, PyTorch, Neural Networks, AI'
     }
   ],
   academic: [
@@ -234,8 +246,9 @@ export const RESUME_DATA = {
 }
 
 export const TERMINAL_COMMANDS = {
-  help: `Available commands:\n  about      — Who I am\n  skills     — Technical expertise\n  projects   — Things I've built\n  contact    — Get in touch\n  clear      — Clear terminal\n  whoami     — Current user`,
+  help: `Available commands:\n  about      — Who I am\n  skills     — Technical expertise\n  projects   — Things I've built\n  experience — Work history\n  contact    — Get in touch\n  clear      — Clear terminal\n  whoami     — Current user`,
   about: `> Rudranarayan\n> AI Developer · Game Developer · System Builder\n\n  Rudranarayan is a developer focused on building intelligent systems and experimental technology. His work combines generative AI, machine learning, and interactive systems.\n\n  He is interested in creating tools that automate tasks, simulate complex environments, and explore how AI can interact with digital worlds.\n\n  Along with AI development, he also works on game development and simulation systems, experimenting with Unreal Engine and AI-driven mechanics.`,
+  experience: `> Work History Log:\n\n  01  Akiyam Solutions — Gen AI Engineer Intern (Current)\n  02  NITK Surathkal    — AI Research Intern (2025)\n\n  Type 'open experience' to view full terminal-styled dossier.`,
   skills: `> Core competencies (Node-base Analysis):\n\n  [██████████] Python AI      95%\n  [█████████░] Neural Systems 90%\n  [████████░░] Computer Vision 85%\n  [███████░░░] Game Dev       82%\n  \n  Type 'open skills' to view the interactive tree structure.`,
   projects: `> Recent work:\n\n  01  Memory NPC System — Vector-based AI persistence\n  02  Neural Agent      — NEAT-trained autonomous agents\n  03  ISL Translator    — Hand gesture to text (CNN)\n  04  Supply Optimizer  — AI Logistics & Forecasting\n  05  Self-Driving AI   — Computer Vision Navigation\n  06  RAG Chatbot       — PDF-based Knowledge Retrieval\n\n  Type 'open projects' to view immersive details`,
   contact: `> Reach me at:\n\n  Email     lluffy202005@gmail.com\n  Location  Panambur, Mangalore\n  LinkedIn  linkedin.com/in/rudranarayan`,
@@ -262,6 +275,7 @@ export const WINDOW_CONFIGS = {
   game:     { title: 'Pathfinding AI',icon: '🧠', defaultSize: { w: 480, h: 620 }, defaultPos: { x: 300, y: 50 },  glowColor: '#00d4ff' },
   settings: { title: 'Settings',      icon: '⚙️', defaultSize: { w: 600, h: 500 }, defaultPos: { x: 250, y: 100 }, glowColor: '#e2e8f0' },
   explorer: { title: 'File System',   icon: '🗂️', defaultSize: { w: 700, h: 500 }, defaultPos: { x: 200, y: 60 },  glowColor: '#fbbf24' },
+  experience: { title: 'Experience',   icon: '💼', defaultSize: { w: 700, h: 550 }, defaultPos: { x: 180, y: 50 },  glowColor: '#4ade80' },
 }
 
 export const DESKTOP_ICONS = [
@@ -276,4 +290,5 @@ export const DESKTOP_ICONS = [
   { key: 'game',     icon: '🧠', label: 'AI.exe'       },
   { key: 'settings', icon: '🛠️', label: 'Settings'     },
   { key: 'explorer', icon: '🗂️', label: 'Files'        },
+  { key: 'experience', icon: '💼', label: 'Experience'   },
 ]
