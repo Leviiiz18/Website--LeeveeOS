@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS custom properties ─────────────────────────────────────────────── */
+:root {
+  --neon-cyan:   #00d4ff;
+  --neon-purple: #7c3aed;
+  --neon-green:  #00ff00;
+  --z-wallpaper: 0;
+  --z-desktop:   10;
+  --z-windows:   100;
+  --z-taskbar:   5000;
+  --z-tooltips:  9000;
+  --z-boot:      9999;
+}
+
+/* ─── Font smoothing ─────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0; overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #07050f;
+}
+
+/* ─── Custom cursor ──────────────────────────────────────────────────────── */
+*, body         { cursor: none !important; }
+
+#levee-cursor {
+  position: fixed;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  border: 1px solid var(--neon-cyan);
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.15s ease, height 0.15s ease, background 0.15s ease, border 0.15s ease;
+  mix-blend-mode: screen;
+}
+#levee-cursor.expanded {
+  width: 20px; height: 20px;
+  background: rgba(0, 212, 255, 0.15);
+}
+#levee-cursor.clicking {
+  background: rgba(255,255,255,0.8);
+  border-color: #fff;
+  width: 14px; height: 14px;
+}
+
+/* ─── Scrollbars ─────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.3); }
+::-webkit-scrollbar-thumb { background: #003300; border: 1px solid #00ff0066; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #00ff0033; border-color: #00ff00; }
+
+/* ─── Scanline overlay ───────────────────────────────────────────────────── */
+.scanline-overlay {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.04) 0px,
+    rgba(0,0,0,0.04) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  animation: scanlineDrift 8s linear infinite;
+  pointer-events: none;
+}
+@keyframes scanlineDrift {
+  from { background-position-y: 0; }
+  to   { background-position-y: 4px; }
+}
+
+/* ─── Keyframe: caretBlink ───────────────────────────────────────────────── */
+@keyframes caretBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+.caret-blink { animation: caretBlink 0.8s step-end infinite; }
+
+/* ─── Skeleton pulse ─────────────────────────────────────────────────────── */
+@keyframes skeletonPulse {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1; }
+}
+.skeleton-bar { animation: skeletonPulse 1.4s ease-in-out infinite; }
+
+/* ─── Selection color ────────────────────────────────────────────────────── */
+::selection { background: #00ff00; color: #000; }
+
+/* ─── Window open (kept for compat) ─────────────────────────────────────── */
+@keyframes windowOpen {
+  from { opacity: 0; transform: scale(0.92) translateY(8px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+.window-open { animation: windowOpen 0.18s cubic-bezier(.34,1.56,.64,1) both; }
+
+/* ─── Twinkle ─────────────────────────────────────────────────────────────── */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.25; }
+  50%       { opacity: 1; }
+}
+
+/* ─── Vinyl spin ─────────────────────────────────────────────────────────── */
+@keyframes vinylSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.vinyl-spin { animation: vinylSpin 4s linear infinite; }
