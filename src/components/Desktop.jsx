@@ -157,14 +157,14 @@ export default function Desktop({ isMobile }) {
         className="absolute w-full grid p-6"
         style={{ 
           zIndex: 10,
-          top: isMobile ? 32 : 6,
+          top: isMobile ? 48 : 6,
           left: 0,
-          gridTemplateColumns: isMobile ? 'repeat(auto-fill, minmax(80px, 1fr))' : 'repeat(auto-fill, 90px)',
+          gridTemplateColumns: isMobile ? 'repeat(auto-fill, minmax(90px, 1fr))' : 'repeat(auto-fill, 90px)',
           gridAutoFlow: isMobile ? 'row' : 'column',
           gridAutoRows: 'min-content',
-          maxHeight: isMobile ? 'calc(100vh - 120px)' : 'calc(100vh - 120px)',
+          maxHeight: isMobile ? 'calc(100vh - 160px)' : 'calc(100vh - 120px)',
           justifyContent: isMobile ? 'center' : 'start',
-          gap: isMobile ? '12px' : '4px'
+          gap: isMobile ? '16px' : '4px'
         }}
         initial="hidden"
         animate="visible"

@@ -52,14 +52,14 @@ export default function Taskbar({ openWindows, minimized, onTaskClick, activeId 
 
   return (
     <motion.div
-      className={`fixed bottom-0 left-0 right-0 flex items-center gap-2 px-4 ${window.innerWidth < 768 ? 'justify-center mx-auto mb-4 w-[90%] rounded-2xl border border-white/10' : ''}`}
+      className={`fixed bottom-0 left-0 right-0 flex items-center gap-2 px-4 ${window.innerWidth < 768 ? 'justify-center mx-auto mb-6 w-fit min-w-[120px] max-w-[95%] px-6 rounded-3xl border border-white/10' : ''}`}
       style={{
-        height: 56, zIndex: 5000,
-        background: 'rgba(6,6,16,0.75)',
-        backdropFilter: 'blur(32px) saturate(180%)',
-        borderTop: window.innerWidth < 768 ? '1px solid rgba(255,255,255,0.05)' : '1px solid transparent',
-        backgroundImage: 'linear-gradient(rgba(6,6,16,0.75), rgba(6,6,16,0.75))',
-        boxShadow: window.innerWidth < 768 ? '0 8px 32px rgba(0,0,0,0.4)' : 'none',
+        height: window.innerWidth < 768 ? 64 : 56, zIndex: 5000,
+        background: 'rgba(6,6,16,0.85)',
+        backdropFilter: 'blur(32px) saturate(200%)',
+        borderTop: window.innerWidth < 768 ? '1px solid rgba(255,255,255,0.1)' : '1px solid transparent',
+        backgroundImage: 'linear-gradient(rgba(6,6,16,0.85), rgba(6,6,16,0.85))',
+        boxShadow: window.innerWidth < 768 ? '0 12px 40px rgba(0,0,0,0.6)' : 'none',
       }}
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}

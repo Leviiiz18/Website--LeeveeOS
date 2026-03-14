@@ -16,14 +16,15 @@ export default function StatusBar() {
 
   return (
     <div 
-      className="fixed top-0 left-0 right-0 h-7 flex items-center justify-between px-5 select-none"
+      className="fixed top-0 left-0 right-0 h-9 flex items-center justify-between px-6 select-none"
       style={{
         zIndex: 9999,
         background: 'rgba(6, 6, 16, 0.4)',
-        backdropFilter: 'blur(12px)',
-        fontSize: '11px',
-        fontWeight: '600',
-        color: '#e2e8f0',
+        backdropFilter: 'blur(20px)',
+        fontSize: '12px',
+        letterSpacing: '0.4px',
+        fontWeight: '700',
+        color: '#f8fafc',
         fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif'
       }}
     >

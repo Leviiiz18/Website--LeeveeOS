@@ -57,8 +57,8 @@ export default function DesktopIcon({ icon, label, onClick, glowColor = '#00d4ff
       transition={hovered ? { type: 'spring', stiffness: 300, damping: 18 } : { duration: 0 }}
       className="flex flex-col items-center gap-2 cursor-pointer select-none"
       style={{
-        width: 80, padding: '12px 8px',
-        position: 'relative', borderRadius: 14,
+        width: 80, padding: window.innerWidth < 768 ? '16px 4px' : '12px 8px',
+        position: 'relative', borderRadius: 18,
         background: hovered ? 'rgba(255,255,255,0.07)' : 'transparent',
         backdropFilter: hovered ? 'blur(12px)' : 'none',
         border: hovered ? `1px solid ${glowColor}33` : '1px solid transparent',
