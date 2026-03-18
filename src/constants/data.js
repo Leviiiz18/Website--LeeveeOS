@@ -255,19 +255,11 @@ export const TERMINAL_COMMANDS = {
   whoami: `> admin@rudra-os ~ $ id\n  uid=0(root) gid=0(root)\n  groups=root,admin,ai-core`,
 }
 
-export const SONGS = [
-  { title: 'Midnight Protocol',   artist: 'Synthwave Vol.1',    duration: '3:42' },
-  { title: 'Neural Drift',        artist: 'Lo-Fi Dev Sessions', duration: '4:18' },
-  { title: 'Binary Sunset',       artist: 'Codeflow OST',       duration: '3:55' },
-  { title: 'Stack Overflow Blues',artist: 'Dev Anthems',        duration: '5:01' },
-  { title: 'Deploy to Prod',      artist: 'CICD Beats',         duration: '4:33' },
-]
 
 export const WINDOW_CONFIGS = {
   projects: { title: 'Projects',      icon: '📁', defaultSize: { w: 760, h: 500 }, defaultPos: { x: 120, y: 60 },  glowColor: '#00d4ff' },
   about:    { title: 'About.exe',     icon: '👾', defaultSize: { w: 620, h: 440 }, defaultPos: { x: 220, y: 100 }, glowColor: '#4ade80' },
   skills:   { title: 'Skills',        icon: '⚙️', defaultSize: { w: 660, h: 480 }, defaultPos: { x: 170, y: 80 },  glowColor: '#a78bfa' },
-  music:    { title: 'Music Player',  icon: '🎵', defaultSize: { w: 380, h: 600 }, defaultPos: { x: 340, y: 50 },  glowColor: '#f472b6' },
   achievements: { title: 'Achievements', icon: '🏆', defaultSize: { w: 680, h: 560 }, defaultPos: { x: 220, y: 80 },  glowColor: '#fbbf24' },
   resume:       { title: 'Resume',       icon: '📄', defaultSize: { w: 720, h: 600 }, defaultPos: { x: 150, y: 40 },  glowColor: '#00d4ff' },
   trash:        { title: 'Trash',         icon: '🗑️', defaultSize: { w: 520, h: 400 }, defaultPos: { x: 270, y: 130 }, glowColor: '#fb923c' },
@@ -283,7 +275,6 @@ export const DESKTOP_ICONS = [
   { key: 'resume',       icon: '📄', label: 'Resume'       },
   { key: 'about',    icon: '👾', label: 'About.exe'    },
   { key: 'skills',   icon: '⚙️', label: 'Skills'       },
-  { key: 'music',    icon: '🎵', label: 'Music Player' },
   { key: 'achievements', icon: '🏆', label: 'Achievements' },
   { key: 'trash',        icon: '🗑️', label: 'Trash'        },
   { key: 'contact',  icon: '📨', label: 'Contact'      },

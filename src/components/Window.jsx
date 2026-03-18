@@ -60,7 +60,7 @@ export default function Window({
         right: isFullscreen ? 0 : undefined,
         bottom: isFullscreen ? 56 : undefined,
         width: (isFullscreen || window.innerWidth < 768) ? '100%' : (680),
-        height: (isFullscreen || window.innerWidth < 768) ? 'calc(100vh - 56px)' : (480),
+        height: (isFullscreen || window.innerWidth < 768) ? 'calc(100% - 0px)' : (480),
         zIndex,
         borderRadius: isFullscreen ? 0 : 14,
         background: isFullscreen ? 'rgba(10,10,22,0.92)' : 'rgba(10,10,22,0.84)',
@@ -106,7 +106,7 @@ export default function Window({
       <div
         className={`window-titlebar flex items-center px-4 flex-shrink-0 select-none ${isFullscreen ? 'cursor-default' : 'cursor-grab active:cursor-grabbing'}`}
         style={{
-          height: 48, zIndex: 2,
+          height: window.innerWidth < 768 ? 40 : 48, zIndex: 2,
           background: 'rgba(255,255,255,0.04)',
           backdropFilter: 'blur(20px)',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
@@ -114,10 +114,9 @@ export default function Window({
         }}
       >
         {/* Traffic lights */}
-        <div className="flex gap-2.5 mr-6" style={{ zIndex: 3 }}>
+        <div className="flex gap-2 mr-6" style={{ zIndex: 3 }}>
           <TrafficLight color="#ff5f57" symbol="×" onClick={onClose}    isFocused={isFocused} />
           <TrafficLight color="#febc2e" symbol="–" onClick={onMinimize} isFocused={isFocused} />
-          {!isFullscreen && <TrafficLight color="#28c840" symbol="+" onClick={() => {}}   isFocused={isFocused} />}
         </div>
 
         <span className="text-[13px] text-slate-200 font-semibold tracking-[0.4px] flex items-center gap-2" style={{ zIndex: 3 }}>

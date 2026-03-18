@@ -4,7 +4,6 @@ import Window    from './Window'
 import Icon      from './Icon'
 import Taskbar   from './Taskbar'
 import Terminal  from './Terminal'
-import MusicPlayer from './MusicPlayer'
 import { DESKTOP_ICONS, WINDOW_CONFIGS } from '../constants/data'
 import Projects  from '../pages/Projects'
 import Skills    from '../pages/Skills'
@@ -24,7 +23,6 @@ const PAGE_MAP = {
   projects: Projects,
   about:    Terminal,
   skills:   Skills,
-  music:    MusicPlayer,
   achievements: Achievements,
   resume:       Resume,
   trash:    Trash,
@@ -47,25 +45,10 @@ export default function Desktop({ isMobile }) {
   const [contextMenu, setContextMenu] = useState(null) // { x, y }
   const [toasts,      setToasts]      = useState([])
   const [snapZone,    setSnapZone]    = useState(null)  // 'left' | 'right'
-  const [audioAnalyser, setAudioAnalyser] = useState(null)
   const { background, accentColor } = useTheme()
   const toastId = useRef(0)
   const audioContextRef = useRef(null)
 
-  const initAudio = useCallback(() => {
-    if (audioContextRef.current) return audioContextRef.current.analyser
-    
-    const AudioContext = window.AudioContext || window.webkitAudioContext
-    if (!AudioContext) return null
-    
-    const ctx = new AudioContext()
-    const analyser = ctx.createAnalyser()
-    analyser.fftSize = 256
-    
-    audioContextRef.current = { ctx, analyser }
-    setAudioAnalyser(analyser)
-    return analyser
-  }, [])
 
   const focusWindow = useCallback(id => {
     setZMap(z => ({ ...z, [id]: nextZ() }))
@@ -136,9 +119,9 @@ export default function Desktop({ isMobile }) {
     >
       <DigitalParticles color={accentColor} />
       {/* ── Animated Canvas Background ── */}
-      {background === 'pixel' && <CanvasBackground analyser={audioAnalyser} />}
-      {background === 'matrix' && <DesktopMatrixRain analyser={audioAnalyser} />}
-      {background === 'black' && <AudioReactiveBlack analyser={audioAnalyser} />}
+      {background === 'pixel' && <CanvasBackground />}
+      {background === 'matrix' && <DesktopMatrixRain />}
+      {background === 'black' && <AudioReactiveBlack />}
 
       {/* ── Scanline overlay ── */}
       <div className="scanline-overlay pointer-events-none absolute inset-0" style={{ zIndex: 1 }} />
@@ -154,17 +137,18 @@ export default function Desktop({ isMobile }) {
 
       {/* ── Desktop icons ── */}
       <motion.div
-        className="absolute w-full grid p-6"
+        className="absolute w-full px-4"
         style={{ 
           zIndex: 10,
-          top: isMobile ? 48 : 6,
+          top: isMobile ? 60 : 30,
           left: 0,
-          gridTemplateColumns: isMobile ? 'repeat(auto-fill, minmax(90px, 1fr))' : 'repeat(auto-fill, 90px)',
-          gridAutoFlow: isMobile ? 'row' : 'column',
+          display: 'grid',
+          gridTemplateColumns: isMobile ? 'repeat(4, 1fr)' : 'repeat(auto-fill, 90px)',
           gridAutoRows: 'min-content',
-          maxHeight: isMobile ? 'calc(100vh - 160px)' : 'calc(100vh - 120px)',
-          justifyContent: isMobile ? 'center' : 'start',
-          gap: isMobile ? '16px' : '4px'
+          rowGap: isMobile ? '32px' : '24px',
+          columnGap: isMobile ? '12px' : '4px',
+          justifyContent: 'start',
+          maxWidth: isMobile ? '100%' : 'calc(100vw - 320px)',
         }}
         initial="hidden"
         animate="visible"
@@ -227,11 +211,7 @@ export default function Desktop({ isMobile }) {
               isFullscreen={true}
               isMinimized={isMinimized}
             >
-              {w.id === 'music' ? (
-                <PageComp onInitAudio={initAudio} analyser={audioAnalyser} onOpenApp={openWindow} />
-              ) : (
-                <PageComp onOpenApp={openWindow} />
-              )}
+              <PageComp onOpenApp={openWindow} />
             </Window>
           )
         })}
@@ -271,8 +251,8 @@ export default function Desktop({ isMobile }) {
   )
 }
 
-// ─── Audio Reactive Pixel Fireworks Visualizer ─────────────────────────────────
-function CanvasBackground({ analyser }) {
+// ─── Pixel Fireworks Visualizer (Purely Time-Based) ───────────────────────────
+function CanvasBackground() {
   const canvasRef = useRef(null)
   const frameRef  = useRef(null)
 
@@ -318,19 +298,9 @@ function CanvasBackground({ analyser }) {
       const dt = (now - lastT) / 1000
       lastT = now
 
-      let bass = 0
-      let mid  = 0
-      let high = 0
-      
-      if (analyser) {
-        analyser.getByteFrequencyData(dataArray)
-        for (let i = 0; i < 5; i++) bass += dataArray[i]
-        for (let i = 20; i < 60; i++) mid += dataArray[i]
-        for (let i = 100; i < 150; i++) high += dataArray[i]
-        bass = bass / (5 * 255)
-        mid  = mid / (40 * 255)
-        high = high / (50 * 255)
-      }
+      const bass = 0
+      const mid  = 0
+      const high = 0
 
       // Dynamic audio-reactive sky background
       // Base dark sky color
@@ -408,7 +378,7 @@ function CanvasBackground({ analyser }) {
       window.removeEventListener('resize', resize)
       clearTimeout(resizeTimer)
     }
-  }, [analyser])
+  }, [])
 
   return (
     <canvas
@@ -565,7 +535,7 @@ function DigitalParticles() {
   )
 }
 // ─── Desktop Matrix Overlay ─────────────────────────────────────────
-function DesktopMatrixRain({ analyser }) {
+function DesktopMatrixRain() {
   const canvasRef = useRef(null)
 
   useEffect(() => {
@@ -588,13 +558,7 @@ function DesktopMatrixRain({ analyser }) {
     const dataArray = new Uint8Array(analyser ? analyser.frequencyBinCount : 0)
 
     const draw = () => {
-      let bass = 0
-      if (analyser) {
-        analyser.getByteFrequencyData(dataArray)
-        // Check bass frequencies
-        for (let i = 0; i < 5; i++) bass += dataArray[i]
-        bass = bass / (5 * 255)
-      }
+      const bass = 0
 
       // Fade out previous frame (darker flash if heavy bass)
       ctx.fillStyle = bass > 0.5 ? 'rgba(0, 50, 0, 0.4)' : 'rgba(0, 0, 0, 0.05)'
@@ -641,32 +605,8 @@ function hexToRgb(hex) {
   return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '0, 212, 255';
 }
 
-function AudioReactiveBlack({ analyser }) {
-  const [glow, setGlow] = useState(0)
-
-  useEffect(() => {
-    if (!analyser) return
-    const dataArray = new Uint8Array(analyser.frequencyBinCount)
-    let animationId
-
-    const checkBeat = () => {
-      analyser.getByteFrequencyData(dataArray)
-      let bass = 0
-      for (let i = 0; i < 5; i++) bass += dataArray[i]
-      bass = bass / (5 * 255)
-
-      // Only glow on heavy beats
-      if (bass > 0.6) {
-        setGlow(bass)
-      } else {
-        setGlow(prev => Math.max(0, prev - 0.05)) // Decay
-      }
-      animationId = requestAnimationFrame(checkBeat)
-    }
-
-    checkBeat()
-    return () => cancelAnimationFrame(animationId)
-  }, [analyser])
+function AudioReactiveBlack() {
+  const glow = 0
 
   return (
     <div 

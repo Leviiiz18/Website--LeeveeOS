@@ -81,13 +81,14 @@ export default function Taskbar({ openWindows, minimized, onTaskClick, activeId,
             whileTap={{ scale: 0.9 }}
             onClick={() => activeId && closeWindow(activeId)}
             style={{
-              width: 38, height: 38, borderRadius: '50%', flexShrink: 0,
-              background: 'rgba(255,255,255,0.08)',
-              border: '1px solid rgba(255,255,255,0.1)',
+              width: 40, height: 40, borderRadius: '50%', flexShrink: 0,
+              background: activeId ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.06)',
+              border: '1px solid rgba(255,255,255,0.2)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 18, cursor: 'pointer',
-              color: activeId ? '#e2e8f0' : '#475569',
-              opacity: activeId ? 1 : 0.5,
+              fontSize: 20, cursor: 'pointer',
+              color: activeId ? '#ffffff' : 'rgba(255,255,255,0.3)',
+              boxShadow: activeId ? '0 0 15px rgba(0,212,255,0.3)' : 'none',
+              transition: 'all 0.2s',
             }}
           >
             ←
@@ -97,12 +98,13 @@ export default function Taskbar({ openWindows, minimized, onTaskClick, activeId,
             whileTap={{ scale: 0.9 }}
             onClick={() => setMinimized(openWindows.map(w => w.id))}
             style={{
-              width: 38, height: 38, borderRadius: '50%', flexShrink: 0,
-              background: 'rgba(255,255,255,0.08)',
-              border: '1px solid rgba(255,255,255,0.1)',
+              width: 40, height: 40, borderRadius: '50%', flexShrink: 0,
+              background: 'rgba(255,255,255,0.15)',
+              border: '1px solid rgba(255,255,255,0.2)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 18, cursor: 'pointer',
-              color: '#e2e8f0',
+              fontSize: 22, cursor: 'pointer',
+              color: '#ffffff',
+              boxShadow: '0 0 10px rgba(255,255,255,0.1)',
             }}
           >
             ⌂
