@@ -114,7 +114,7 @@ export default function Projects() {
                 </div>
               </div>
 
-              <div className="mt-auto space-y-3">
+              <div className="mt-10 space-y-3">
                 <a 
                   href={selected.github}
                   target="_blank"
