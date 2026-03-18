@@ -270,7 +270,6 @@ function CanvasBackground() {
     resize()
     window.addEventListener('resize', resize)
 
-    const dataArray = new Uint8Array(analyser ? analyser.frequencyBinCount : 0)
     let lastT = performance.now()
     
     // Generate static city skyline (pixelated)
@@ -555,8 +554,6 @@ function DesktopMatrixRain() {
     const columns = Math.ceil(canvas.width / fontSize)
     const drops = Array.from({ length: columns }).fill(1)
     
-    const dataArray = new Uint8Array(analyser ? analyser.frequencyBinCount : 0)
-
     const draw = () => {
       const bass = 0
 
